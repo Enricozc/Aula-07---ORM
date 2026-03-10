@@ -47,7 +47,7 @@ class Produto(Base):
     
 
 #Criar a conexão com banco sqlite
-engine = create_engine("sqlite:///estoque.db", echo=True)
+engine = create_engine("sqlite:///estoque.db", echo=False)
 
 
 # Criar a tecela no banco de dados
@@ -60,8 +60,39 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 #criar um objeto
-produto1 = Produto("Notebook", 5000, 10, True)
+#produto1 = Produto("Notebook", 2500, 10, True)
+#produto2 = Produto("Teclado", 250, 30, True)
+#produto3 = Produto("Mouse", 120, 72, True)
 
-session.add(produto1)
-session.commit()
+#session.add(produto1)
+#session.add(produto2)
+#session.add(produto3)
 
+#session.commit()
+
+
+# Listar - Buscar - Ler
+
+#Buscar todos os produos do meu banco
+Produtos = session .query(Produto).all()
+#print(Produtos[0])
+#for p in Produtos:
+#    print(f"Nome do produto {p.nome} - Preço: {p.preco}")
+
+
+#BUscar o roduto pelo id
+Produto_id = session.query(Produto).filter(Produto.preco > 1000).all()
+#print(Produto_id)
+
+Produto_id2 = session.query(Produto).filter_by(id=1).first()
+#print(Produto_id2)
+
+#Produtos organizados
+Produtos_organizados = session.query(Produto).order_by(Produto.estoque).all()
+Produtos_organizados2 = session.query(Produto).order_by(Produto.estoque.desc).all()
+#for produto in Produtos_organizados:
+#   print(produto)
+
+# Top produtos ou limitar a busca
+estoque_baixo = session.query (Produto).filter(Produto.estoque <= 50).limit(3).all()
+print(estoque_baixo)
